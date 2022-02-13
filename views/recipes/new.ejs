@@ -1,0 +1,52 @@
+<%layout('layouts/boilerplate')%> 
+    <h1 class="text-center" id="header">Create New Recipe</h1>
+    <div class="row mt-3">
+        <div class="col-8 offset-2">
+            <form action="/recipes" method="post" novalidate class="validated-form">
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="name">Title</span>
+                <input type="text" name="name" class="form-control" placeholder="Name of your Recipe" aria-label="name" aria-describedby="name" required>
+              </div>
+
+              <div class="input-group mb-3">
+                <span class="input-group-text" id="image">imageURL</span>
+                <input type="text" name="image" class="form-control" aria-label="image" aria-describedby="image">
+              </div>
+
+              <div class="input-group mb-3">
+                <span class="input-group-text" id="description">Description</span>
+                <textarea class="form-control" name="description" aria-label="description" required></textarea>
+              </div>
+
+              <div id="ing">
+                <div class="input-group mb-3">
+                    <span class="input-group-text">Quantity</span>
+                    <input type="text" name="ingredients[0][quantity]" class="form-control" placeholder="Quantity" aria-label="Username" >
+                    <span class="input-group-text">Ingredient</span>
+                    <input type="text" name="ingredients[0][name]" class="form-control" placeholder="Ingredient Name" aria-label="ingredientName" required>
+                    <span class="input-group-text">Memo</span>
+                    <input type="text" name="ingredients[0][type]" class="form-control" placeholder="/" aria-label="memo">
+                    <button class="btn btn-outline-secondary" type="button" onclick="addIng()">+</button>
+                </div>
+              </div>
+              <div id='step'>
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="steps">Step 1</span>
+                    <input type="text" class="form-control" name="steps[]" aria-label="name" aria-describedby="basic-addon1" required>
+                    <button class="btn btn-outline-secondary" type="button" onclick="addStep()">+</button>
+                </div>
+              </div>
+              <div class="input-group mb-3">
+                <span class="input-group-text" id="instruction">Tips</span>
+                <textarea class="form-control" name="instruction" aria-label="instruction"></textarea>
+              </div>
+
+              <div class="d-grid gap-2 col-6 mx-auto">
+                <button class="btn btn-success">Submit</button>
+                <a href="/recipes" class="btn btn-light">Cancel</a>
+            </div>
+            
+            </form>
+        </div>
+    </div>
+    

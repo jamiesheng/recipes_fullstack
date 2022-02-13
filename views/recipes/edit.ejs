@@ -1,0 +1,72 @@
+<% layout('layouts/boilerplate') %> 
+    <h1 id="header" class="text-center mb-5">Edit <%= recipe.name %> </h1>
+    <form action="/recipes/<%= recipe._id%>?_method=PUT" method="POST" novalidate class="validated-form">
+        <div class="container mb-3">
+
+        <div class="input-group mb-3">
+            <span class="input-group-text" id="name">Title</span>
+            <input type="text" name="name" class="form-control" value= "<%= recipe.name %>" aria-label="name" aria-describedby="name" required>
+          </div>
+
+          <div class="input-group mb-3">
+            <span class="input-group-text" id="image">imageURL</span>
+            <input type="text" name="image" class="form-control" value= "<%= recipe.image %>" aria-label="image" aria-describedby="image">
+          </div>
+          
+          <div class="input-group mb-3">
+            <span class="input-group-text" id="description">Description</span>
+            <textarea class="form-control" name="description" aria-label="description" required><%=recipe.description%></textarea>
+          </div>
+
+          
+
+          </div>
+        <div class="container mb-3">
+          <div id="ing">
+            <%let i=0 %> 
+            <% for (let ingredient of recipe.ingredients){ %> 
+            <div class="input-group mb-3">
+                <span class="input-group-text">Quantity</span>
+                <input type="text" name="<%=`ingredients[${i}][quantity]`%>" class="form-control" aria-label="Username" value= "<%=ingredient.quantity %>"/>
+                <span class="input-group-text">Ingredient</span>
+                <input type="text" name="<%=`ingredients[${i}][name]`%>" class="form-control" aria-label="Server" value= "<%=ingredient.name %>" required/>
+                <span class="input-group-text">Memo</span>
+                <input type="text" name="<%=`ingredients[${i}][type]`%>" class="form-control" aria-label="Server" value= "<%=ingredient.type %>"/>
+                <button class="btn btn-outline-secondary" type="button" onclick="return this.parentNode.remove();">-</button>
+            </div>
+            <%i+=1 %>
+            <% } %>
+          </div>
+          <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+          <button class="btn btn-outline-secondary" type="button" onclick="addIng()">+ Ingredient</button>
+        </div>
+        </div>
+        <div class="container mb-3">
+        <div id='step'>
+            <%let countStep=0 %> 
+            <%for (let step of recipe.steps){ %> 
+            <%countStep+=1 %> 
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="steps"><%= `Step ${countStep}` %> </span>
+                <input type="text" class="form-control" name="steps[]" aria-label="name" aria-describedby="basic-addon1" value="<%=step%>">
+                <button class="btn btn-outline-secondary" type="button" onclick="return this.parentNode.remove();">-</button>
+            </div>
+            <%} %> 
+        </div>
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+        <button class="btn btn-outline-secondary" type="button" onclick="addStep()">+ Step</button>
+        </div>
+        </div>
+        <div class="input-group mb-3">
+            <span class="input-group-text" id="instruction">Tips:</span>
+            <textarea class="form-control" name="instruction" aria-label="instruction"><%=recipe.instruction%></textarea>
+          </div>
+        <div class="d-grid gap-2 col-6 mx-auto">
+            <button class="btn btn-success">Submit</button>
+            <a href="/recipes" class="btn btn-light">Cancel</a>
+        </div>
+        
+    </form>
+
+    <br>
+   

@@ -1,0 +1,143 @@
+<% layout('layouts/boilerplate') %> 
+    <h1 class="text-center"><%= recipe.name%></h1>
+    <div class="container-fluid mt-2">
+      <div class="row mb-2">
+        <span align="center">Submitted by <%= recipe.author.username %> </span> 
+      </div>
+      <div class="row mb-5">
+        <div class="card mb-3">
+          <div class="row">
+            <div class="col-md-5">
+              <img class='image-fluid' width="500px"  src="<%= recipe.image %> " alt="recipe_picture">
+            </div>
+            <div class="col-md-7">
+                <div class="card-body">
+                  <h5 class="card-title">Ingredients</h5>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <%let count=1 %> 
+                      <%for(let ingredient of recipe.ingredients){%>
+                          <li class="list-group-item"><%= `${ingredient.quantity} ${ingredient.name}` %>
+                            <% if(ingredient.type!==""){  %>
+                              
+                                <button class="btn btn-light btn-sm" type="button" data-bs-toggle="collapse" data-bs-target=<%=`#collapse_${count}`%>  aria-expanded="false" aria-controls=<%=`#collapse_${count}`%>>
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+                                  </svg>
+                                </button>
+                              
+                              <div class="collapse" id=<%=`collapse_${count}`%> >
+                                <div class="card card-body" style="width: 18rem;">
+                                  <h5 class="card-title">Memo:</h5>
+                                  <%= ingredient.type %> 
+                                </div>
+                              </div>
+                            <% } %>   </li>
+                            <%count+=1 %> 
+                          <% } %>  
+                </ul>
+              
+            </div>
+          </div>
+        </div>
+        
+      </div>
+      <div class="row mb-5">
+        <div class="col-md-12 offset">
+          <div class="card" style="width: 70rem;">
+            <div class="card-header">
+              Steps
+            </div>
+            <ol class="list-group list-group-flush">
+              <%let countCheck=0 %> 
+              <%for(let step of recipe.steps){%>
+                 <%countCheck+=1 %> 
+                 
+                <li class="list-group-item">
+                  <input class="form-check-input" type="checkbox" value="" id=<%= `check${countCheck}` %> >
+                <label class="form-check-label" for=<%= `check${countCheck}` %>>
+                  <%= step %> 
+                </label>
+                  
+                </li>
+                <% } %> 
+            </ol>
+          </div>
+        </div>
+      </div>
+      
+      <div class="row mx-auto mb-5 mt-8">
+        <div class="col-md-6 offset-3">
+        <div class="card text-dark bg-light mb-3" >
+          <div class="card-body">
+            <h5 class="card-title">Tips</h5>
+            <p class="card-text"><%= recipe.instruction %></p>
+          </div>
+        </div>
+      </div>
+      <div class="row mt-3 mb-5">
+        <div class='row'>
+          <%for (let review of recipe.reviews){ %> 
+          <div class="col-sm-4">
+            <div class="card border-primary mb-3" style="max-width: 25rem;">
+              <div class="card-header">
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                  <form action="/recipes/<%= recipe._id %>/reviews/<%= review._id %>?_method=DELETE" method="POST">
+                    <button class="btn btn-sm btn-close"></button>
+                    </button>
+                  </form>
+                </div>
+              </div>
+              <div class="card-body text-primary">
+                <h5 class="card-title">Rating: <%= review.rating %></h5>
+                <p class="card-text"><%= review.body %> </p>
+              </div>
+            </div>
+          </div>
+          <%}  %> 
+        </div>
+        <h2>Leave a review:</h2>
+        <form action="/recipes/<%= recipe.id %>/reviews" method='POST' novalidate class="validated-form">
+          <div class="mb-3">
+            <label class="form-label" for="rating">Rating</label>
+            <input class="form-range" type="range" min='1' max="5" name='review[rating]' id='rating'>
+          </div>
+          <div class='mb-3'>
+            <label class="form-label" for="body">Review:</label>
+            <textarea class="form-control" name="review[body]" id="body" cols="20" rows="5" id='body' required></textarea>
+            <div class="valid-feedback">
+              good to go!
+            </div>
+          </div>
+          <button>Submit</button>
+        </form>
+      </div>
+      </div>
+    </div>
+
+    <div class="d-grid gap-2 col-6 mx-auto mb-2">
+      <a class="btn btn-light" href="/recipes">
+        <svg t="1642463006437" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2253" width="25" height="25"><path d="M836.254523 499.826749c-26.789133 0-48.484248 21.684882-48.484248 48.483224 0 151.49332-123.253138 274.747481-274.746458 274.747481-151.492296 0-274.745435-123.254162-274.745435-274.747481 0-151.492296 123.252115-274.745435 274.745435-274.745435l0.021489 0 0 80.807421 193.938014-129.291668L513.045307 95.788623l0 80.807421-0.021489 0c-204.943672 0-371.714953 166.760025-371.714953 371.714953 0 204.954929 166.771281 371.715977 371.714953 371.715977 204.943672 0 371.71393-166.761048 371.71393-371.715977C884.737748 521.512654 863.042633 499.826749 836.254523 499.826749" p-id="2254"></path></svg> Back to Index</a>
+   </div> 
+   <%if(currentUser && recipe.author.equals(currentUser._id)){%> 
+   <div class="d-grid gap-2 col-6 mx-auto mb-1">
+      <a class="btn btn-primary" href="/recipes/<%=recipe._id%>/edit">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-vector-pen" viewBox="0 0 16 16">
+          <path fill-rule="evenodd" d="M10.646.646a.5.5 0 0 1 .708 0l4 4a.5.5 0 0 1 0 .708l-1.902 1.902-.829 3.313a1.5 1.5 0 0 1-1.024 1.073L1.254 14.746 4.358 4.4A1.5 1.5 0 0 1 5.43 3.377l3.313-.828L10.646.646zm-1.8 2.908-3.173.793a.5.5 0 0 0-.358.342l-2.57 8.565 8.567-2.57a.5.5 0 0 0 .34-.357l.794-3.174-3.6-3.6z"/>
+          <path fill-rule="evenodd" d="M2.832 13.228 8 9a1 1 0 1 0-1-1l-4.228 5.168-.026.086.086-.026z"/>
+        </svg>
+         EDIT</a>
+  </div>
+  
+  <form action="/recipes/<%= recipe._id %>?_method=DELETE " method="POST">
+    <div class="d-grid gap-2 col-6 mx-auto">
+      <button class="btn btn-outline-danger">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+          <path fill-rule="evenodd" d="M13.854 2.146a.5.5 0 0 1 0 .708l-11 11a.5.5 0 0 1-.708-.708l11-11a.5.5 0 0 1 .708 0Z"/>
+          <path fill-rule="evenodd" d="M2.146 2.146a.5.5 0 0 0 0 .708l11 11a.5.5 0 0 0 .708-.708l-11-11a.5.5 0 0 0-.708 0Z"/>
+        </svg> Delete
+      </button>
+    </div>
+  </form>
+  <%} %> 
+ 
